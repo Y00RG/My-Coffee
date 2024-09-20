@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Checkout
+{% endblock %}
+
+{% block content %}
+
+<div class="my-form container p-5 my-5 rounded border border-warning">
+    <h2 class="text-center">Checkout</h2>
+    <hr>
+    {% include 'partials/_alerts.html' %}
+    
+{% if not request.user.is_authenticated or request.user.is_anonymous %}
+    <h5  class="alert alert-warning">
+        You Must Be
+        <a href="{% url 'signin' %}" class="text-dark">Logged In !</a>
+    </h5>
+
+{% elif not order %}
+    <h4 class="alert alert-warning">
+        No Orders Here!
+    </h4>
+{% else %}
+    <!-- hide signup form after account created -->
+    {% if is_added == True %}
+    <form method="POST" style="display: none;">
+    {% else %}
+    <form method="POST">
+    {% endif %}
+        {% csrf_token %}
+
+        Order Number: <span class="my-num">{{ order.id }}</span>
+        <hr>
+        Product Count: <span class="my-num">{{ order_details.count }}</span>
+        <hr>
+        Total Amount: <span class="my-num">{{ total }}$</span>
+        <hr>
+        <a href="{% url 'cart' %}" class="btn btn-secondary">Cart Details</a>
+        <hr>
+    
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="input_ship_address">Shipment Address</label>
+                <input type="text" class="form-control" name="shipment_address" 
+                id="input_ship_address" required value="{{ shipment_address }}">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="input_ship_phone">Shipment Phone</label>
+                <input type="text" class="form-control" name="shipment_phone" 
+                id="input_ship_phone" required value="{{ shipment_phone }}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="input_card_number">Card Number</label>
+                <input type="text" class="form-control" name="card_number" 
+                id="input_card_number" required value="{{ card_number }}" 
+                placeholder="3333 3333 3333 3333">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="input_expire">Expire</label>
+                <input type="text" class="form-control" name="expire" 
+                id="input_expire" required value="{{ expire }}" placeholder="mm/YY">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="input_security_code">Security Code</label>
+                <input type="text" class="form-control" name="security_code" 
+                id="input_security_code" placeholder="333" required value="{{ security_code }}">
+            </div>
+        </div>
+        
+        <button type="submit" name="btn_payment" class="btn btn-warning">Payment</button>
+    </form>
+{% endif %}
+</div>
+
+{% endblock %}

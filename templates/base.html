@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/pretty-checkbox.min.css' %}">
+  <link rel="icon" href="{% static 'img/mycoffee.png' %}" type="image/png">
+  <title>My coffee | {% block title %}{% endblock %}</title>
+</head>
+<body>
+
+  <div class="d-flex flex-column min-vh-100"> <!-- Flexbox wrapper with min height -->
+    
+    {% include 'partials/_navbar.html' %}
+    
+    <main class="flex-fill"> <!-- Main content takes up remaining space -->
+      {% block content %}
+      {% endblock %}
+    </main>
+
+    {% include 'partials/_footer.html' %}
+    
+  </div>
+
+  <script src="{% static 'js/jquery-3.4.1.slim.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script>
+      $(function () {
+          $('[data-toggle="popover"]').popover()
+      })
+      $(".year").text( (new Date).getFullYear() );
+
+      // Manage add to cart quantity focus and select
+      $(document).ready(function(){
+        $('#staticBackdrop').on('shown.bs.modal', function(){
+          $(this).find('#inputQty').focus();
+          $(this).find('#inputQty').select();
+        });
+      });
+  </script>
+</body>
+</html>
